@@ -1,0 +1,6 @@
+*.o
+bcc
+*tab*
+*yy*
+debug_bcc
+*.bc
