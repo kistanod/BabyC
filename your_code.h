@@ -7,7 +7,8 @@ typedef enum{ASTNODE_ARITH_OP, ASTNODE_LOGIC_OP, ASTNODE_COMPARE, ASTNODE_ASSIGN
 typedef enum{ADD_OP, MULT_OP, SUB_OP, DIV_OP} ASTOp; 
 
 typedef struct ASTNode ASTNode;
-struct ASTNode{
+
+struct ASTNode {
 	ASTNodeType type; 
     ASTOp op; // The actual operation (add, mult, etc)
 	int num;  //Need to store the actual value for number nodes
@@ -20,6 +21,12 @@ struct ASTNode{
 
 	// Depending on your implementation, you may need to add other fields to this struct 
 
+};
+typedef struct DataItem DataItem;
+
+struct DataItem {
+   ASTNode* data;  
+   char* key;
 };
 
 // Add functions to create the different kinds of ASTNodes 
@@ -36,6 +43,7 @@ ASTNode* CreateAddNode(ASTNode* item1, ASTNode* item2);
 ASTNode* CreateSubtractNode(ASTNode* item1, ASTNode* item2);
 ASTNode* CreateMultNode(ASTNode* item1, ASTNode* item2);
 ASTNode* CreateDivideNode(ASTNode* item1, ASTNode* item2);
+ASTNode* CreateWhileNode(ASTNode* condition, ASTNode* StatementList);
 
 // Need a function to add a declaration to your symbol table
 void AddDeclaration(char* name);
