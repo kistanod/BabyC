@@ -51,9 +51,9 @@
 
 // Add the rest of the types for the grammar's symbols
 %type <node> Goal
-%type <node> DeclarationList
 %type <node> StatementList
 %type <node> Declaration
+%type <node> LHS
 
 %%
 
@@ -63,21 +63,17 @@
 
 Goal: "main" '(' ')' '{' DeclarationList StatementList '}'	{gASTRoot=$6;} // Store the AST root node in gASTRoot
 ;
-
-DeclarationList: {$$ = NULL;} 
-				| Declaration DeclarationList {$$ = CreateDeclarationListNode($1,$2); printf("Adding a declaration to a declaration list \n");}
+//{$$ = NULL;}  {$$ = CreateDeclarationListNode($1,$2); printf("Adding a declaration to a declaration list \n");}
+DeclarationList: | Declaration DeclarationList
 ;
 
 Declaration: "int" IDENT ';' {AddDeclaration($2); printf("Processing declaration of %s\n", $2);}
 ;
 
-Factor: IDENT 		{$$ = CreateIdentNode($1); printf("Creating IDENT node for %s\n", $1);}
-		| NUM 		{$$ = CreateNumNode($1); printf("Creating NUM node for %d\n", $1);}
-		| '('Expr')'	{$$ = $2;}
-;
+
 
 StatementList: {$$ = NULL;} 
-               | Statement StatementList	{$$ = CreateStatementListNode($1,$2); printf("Adding a statement to a statement list \n");}
+               | Statement StatementList {$$ = CreateStatementListNode($1,$2); printf("Adding a Statement to a Statement list \n");}
 ;
 
 Statement: Assignment {$$ = $1;}
@@ -85,16 +81,25 @@ Statement: Assignment {$$ = $1;}
 	     //| WHILE {$$ = $1;}
 ;
 
-Assignment: IDENT '=' Expr ';' {$$ = CreateAssignmentNode($1, $3); printf("Creating assignment node");}
+Assignment: LHS '=' Expr ';' {$$ = CreateAssignmentNode($1, $3); printf("Creating Assignment node\n");}
 ;
 
+LHS: IDENT {$$ = CreateIdentNode($1); printf("Creating left-hand IDENT node for %s\n", $1);}
+
 Expr: Term {$$ = $1}
-	| Expr '+' Term {$$ = CreateAddNode($1, $3); printf("Creating Add node for ");}
-	| Expr '-' Term {$$ = CreateSubtractNode($1, $3); printf("Creating Subtract node");}
+	| Expr '+' Term {$$ = CreateAddNode($1, $3); printf("Creating Addition node\n");}
+	| Expr '-' Term {$$ = CreateSubtractNode($1, $3); printf("Creating Subtraction node\n");}
 ;
 
 Term: Factor {$$ = $1}
-	| Term '*' Factor {$$ = CreateMultNode($1, $3); printf("Creating Mult node ");}
-	| Term '/' Factor {$$ = CreateDivideNode($1, $3); printf("Creating Divide node ");}
+	| Term '*' Factor {$$ = CreateMultNode($1, $3); printf("Creating Multiplication node\n");}
+	| Term '/' Factor {$$ = CreateDivideNode($1, $3); printf("Creating Division node\n");}
 ;
+
+Factor: IDENT 		{$$ = CreateIdentNode($1); printf("Creating IDENT node for %s\n", $1);}
+		| NUM 		{$$ = CreateNumNode($1); printf("Creating NUM node for %d\n", $1);}
+		| '('Expr')'	{$$ = $2; printf("Creating Expression node in parentheses\n")}
+;
+
+
 %%

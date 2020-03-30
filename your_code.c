@@ -27,17 +27,11 @@ ASTNode* CreateStatementListNode(ASTNode* statement, ASTNode* statementList) {
         statement->next = statementList;
         return statement;
 }
-
-ASTNode* CreateDeclarationListNode(ASTNode* declaration, ASTNode* declarationList) {
-
-        declaration->next = declarationList;
-        return declaration;
+ASTNode* CreateAssignmentNode(ASTNode* identNode, ASTNode* expr) {
         
-}
-ASTNode* CreateAssignmentNode(char* ident, ASTNode* expr) {
         ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
         node->type = ASTNODE_ASSIGN;
-        node->name = ident;
+        node->left = identNode;
         node->right = expr;
         return node;
 }

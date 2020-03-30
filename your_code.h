@@ -30,8 +30,8 @@ ASTNode* CreateIdentNode(char* name);
 ASTNode* CreateStatementListNode(ASTNode* statement, ASTNode* statementList);
 
 // My implementation
-ASTNode* CreateDeclarationListNode(ASTNode* declaration, ASTNode* declarationList);
-ASTNode* CreateAssignmentNode(char* ident, ASTNode* expr);
+
+ASTNode* CreateAssignmentNode(ASTNode* identNode, ASTNode* expr);
 ASTNode* CreateAddNode(ASTNode* item1, ASTNode* item2);
 ASTNode* CreateSubtractNode(ASTNode* item1, ASTNode* item2);
 ASTNode* CreateMultNode(ASTNode* item1, ASTNode* item2);
