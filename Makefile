@@ -23,7 +23,7 @@ Parser: BabyC.y
 	bison -d BabyC.y
 	$(CC) -c BabyC.tab.c
 
-%.o: %.c 
+%.o: %.c
 	$(CC) $(CWARN) -c $<
 
 clean:

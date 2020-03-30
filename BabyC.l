@@ -51,7 +51,7 @@ void yyerror (const char *s)
 [a-zA-Z_][a-zA-Z_]* {yylval.string = strdup(yytext); return IDENT;}
  /* This is the action for NUM. Write the regular expression before the action. */
 
-[0-9]* {yylval.num = atoi(yytext); return NUM; }
+[+-]?[0-9]+ {yylval.num = atoi(yytext); return NUM; }
  	/* Whitespace is ignored */
 [ \t\n]+
    /*No match. Fatal error.*/

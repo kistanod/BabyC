@@ -15,6 +15,7 @@ struct ASTNode {
 	char *name; //Need to store the actual variable name for ident nodes
 	ASTNode* left; // Left child
 	ASTNode* right; // Right child
+    int tableLocation;
 	
 	// The following pointer is just a suggestion; you don't have to use it if you have a better design.
 	ASTNode* next; // a pointer used to link statement nodes together in a statement list
@@ -25,7 +26,7 @@ struct ASTNode {
 typedef struct DataItem DataItem;
 
 struct DataItem {
-   ASTNode* data;  
+   int data;  
    char* key;
 };
 

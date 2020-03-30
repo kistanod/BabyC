@@ -2,10 +2,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define TABLE_SIZE 1000
+#define TABLE_SIZE 100
 
+DataItem* symbolTable[TABLE_SIZE];
 
-// Write the implementations of the functions that do the real work here
+/* found on stack overflow, some simple hash function */
+unsigned int hashFunction(char* str) {
+    unsigned int hash = 5381;
+    int c;
+    while (c = *str++)
+        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+    return hash % TABLE_SIZE;
+}
 
 ASTNode* CreateNumNode(int num) {
 	ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
@@ -16,10 +24,21 @@ ASTNode* CreateNumNode(int num) {
 
 
 ASTNode* CreateIdentNode(char* name) {
-	ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-	node->type = ASTNODE_IDENT;
-	node->name = name;
-	return node;
+
+    unsigned int hashResult = hashFunction(name);
+
+    if(symbolTable[hashResult] != NULL) {
+        ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+	    node->type = ASTNODE_IDENT;
+	    node->name = name;
+        node->tableLocation = hashResult;
+	    return node;
+    } else {
+        printf("ERROR: varible %s not declared!", name);
+        exit(1);
+    }
+
+	
 }
 
 // Take a statement node and a statement list node and connect them together
@@ -83,21 +102,16 @@ ASTNode* CreateWhileNode(ASTNode* condition, ASTNode* StatementList) {
 
 void AddDeclaration(char* name) {
 
+    unsigned int hashResult = hashFunction(name);
+    symbolTable[hashResult] = (DataItem*)malloc(sizeof(DataItem));
+    symbolTable[hashResult]->key = name;
+
 }
 
-/* found on stack overflow, some simple hash function*/
-unsigned int hash(char* str) {
-    unsigned int hash = 5381;
-	int c;
 
-	while (c = *str++)
-		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-
-	return hash % TABLE_SIZE;
-}
 
 // Commented out in this assignment 
-/*void GenerateILOC(ASTNode* node); {
+/* void GenerateILOC(ASTNode* node); {
 
-}*/
+} */
 
