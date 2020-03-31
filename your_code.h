@@ -17,7 +17,6 @@ typedef struct ASTNode ASTNode;
 struct ASTNode {
 	ASTNodeType type; 
     ASTOp op; // The actual operation (add, mult, etc)
-    COMPOp comparison;
 	int num;  //Need to store the actual value for number nodes
 	char* name; //Need to store the actual variable name for ident nodesz
     
@@ -29,6 +28,9 @@ struct ASTNode {
 	ASTNode* next; // a pointer used to link statement nodes together in a statement list
 
 	// Depending on your implementation, you may need to add other fields to this struct 
+
+    COMPOp condition;
+    ASTNode* conditionNode;
 
 };
 typedef struct DataItem DataItem;
@@ -56,6 +58,10 @@ ASTNode* CreateDivideNode(ASTNode* item1, ASTNode* item2);
 
 // the condition declaration
 ASTNode* CreateWhileNode(ASTNode* condition, ASTNode* StatementList);
+ASTNode* CreateIFNode(ASTNode* condition, ASTNode* StatementList);
+ASTNode* CreateIFELSENode(ASTNode* condition, ASTNode* IFStatementList, ASTNode* ELSEStatementList);
+
+
 ASTNode* CreateORNode(ASTNode* item1, ASTNode* item2);
 ASTNode* CreateANDNode(ASTNode* item1, ASTNode* item2);
 ASTNode* CreateCompareNode(ASTNode* expr1, COMPOp comparison, ASTNode* expr2);
@@ -65,6 +71,8 @@ ASTNode* CreateEQNode(ASTNode* expr1, ASTNode* expr2);
 ASTNode* CreateNENode(ASTNode* expr1, ASTNode* expr2);
 ASTNode* CreateLNode(ASTNode* expr1, ASTNode* expr2);
 ASTNode* CreateMNode(ASTNode* expr1, ASTNode* expr2);
+
+
 
 // Need a function to add a declaration to your symbol table
 void AddDeclaration(char* name);

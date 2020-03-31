@@ -56,11 +56,14 @@
 %type <node> Declaration
 %type <node> LHS
 %type <node> IF
-%type <node> _WHILE
 %type <node> Condition
 %type <node> LTerm
 %type <node> LFactor
 %type <node> Compare
+
+%type <node> _WHILE
+%type <node> _IF
+
 
 %%
 
@@ -86,7 +89,7 @@ StatementList: {$$ = NULL;}
 
 Statement: Assignment {$$ = $1;}
 	     | _WHILE {$$ = $1;}
-         //| _IF {$$ = $1;}
+         | _IF {$$ = $1;}
 ;
 
 Assignment: LHS '=' Expr ';' {$$ = CreateAssignmentNode($1, $3); printf("Creating Assignment node\n");}
@@ -130,5 +133,9 @@ Compare: Expr LE Expr {$$ = CreateLENode($1, $3); printf("Creating Compare node\
        | Expr '<' Expr {$$ = CreateMNode($1, $3); printf("Creating Compare node\n");}
 ;
 
+
+_IF: IF '(' Condition ')' '{' StatementList '}' {$$ = CreateIFNode($3, $6); printf("Creating if Statement node\n");}
+   | IF '(' Condition ')' '{' StatementList '}' ELSE '{' StatementList '}' {$$ = CreateIFELSENode($3, $6, $10); printf("Creating if-else Statement node\n");}
+;
 
 %%

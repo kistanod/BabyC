@@ -118,10 +118,10 @@ ASTNode* CreateANDNode(ASTNode* item1, ASTNode* item2) {
     return node;
 }
 
-ASTNode* CreateCompareNode(ASTNode* expr1, COMPOp comparison, ASTNode* expr2) {
+ASTNode* CreateCompareNode(ASTNode* expr1, COMPOp condition, ASTNode* expr2) {
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
     node->type = ASTNODE_COMPARE;
-    node->comparison = comparison;
+    node->condition = condition;
     node->left = expr1;
     node->right = expr2;
     return node;
@@ -143,7 +143,7 @@ void AddDeclaration(char* name) {
 ASTNode* CreateLENode(ASTNode* expr1, ASTNode* expr2) {
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
     node->type = ASTNODE_LOGIC_OP;
-    node->comparison = LE_OP;
+    node->condition = LE_OP;
     node->left = expr1;
     node->right = expr2;
     return node;
@@ -151,7 +151,7 @@ ASTNode* CreateLENode(ASTNode* expr1, ASTNode* expr2) {
 ASTNode* CreateGENode(ASTNode* expr1, ASTNode* expr2) {
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
     node->type = ASTNODE_LOGIC_OP;
-    node->comparison = GE_OP;
+    node->condition = GE_OP;
     node->left = expr1;
     node->right = expr2;
     return node;
@@ -160,7 +160,7 @@ ASTNode* CreateGENode(ASTNode* expr1, ASTNode* expr2) {
 ASTNode* CreateEQNode(ASTNode* expr1, ASTNode* expr2) {
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
     node->type = ASTNODE_LOGIC_OP;
-    node->comparison = EQ_OP;
+    node->condition = EQ_OP;
     node->left = expr1;
     node->right = expr2;
     return node;
@@ -168,7 +168,7 @@ ASTNode* CreateEQNode(ASTNode* expr1, ASTNode* expr2) {
 ASTNode* CreateNENode(ASTNode* expr1, ASTNode* expr2) {
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
     node->type = ASTNODE_LOGIC_OP;
-    node->comparison = NE_OP;
+    node->condition = NE_OP;
     node->left = expr1;
     node->right = expr2;
     return node;
@@ -176,7 +176,7 @@ ASTNode* CreateNENode(ASTNode* expr1, ASTNode* expr2) {
 ASTNode* CreateLNode(ASTNode* expr1, ASTNode* expr2) {
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
     node->type = ASTNODE_LOGIC_OP;
-    node->comparison = L_OP;
+    node->condition = L_OP;
     node->left = expr1;
     node->right = expr2;
     return node;
@@ -185,9 +185,26 @@ ASTNode* CreateLNode(ASTNode* expr1, ASTNode* expr2) {
 ASTNode* CreateMNode(ASTNode* expr1, ASTNode* expr2) {
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
     node->type = ASTNODE_LOGIC_OP;
-    node->comparison = M_OP;
+    node->condition = M_OP;
     node->left = expr1;
     node->right = expr2;
+    return node;
+}
+
+ASTNode* CreateIFNode(ASTNode* condition, ASTNode* StatementList) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = ASTNODE_IF;
+    node->conditionNode = condition;
+    node->left = StatementList;
+    node->right = NULL;
+    return node;
+}
+ASTNode* CreateIFELSENode(ASTNode* condition, ASTNode* IFStatementList, ASTNode* ELSEStatementList) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = ASTNODE_IF;
+    node->conditionNode = condition;
+    node->left = IFStatementList;
+    node->right = ELSEStatementList;
     return node;
 }
 
