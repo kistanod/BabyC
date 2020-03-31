@@ -1,4 +1,7 @@
 #!/bin/bash
+
+make all > /dev/null
+
 for i in 1 2 3 4 5 6 7 8
 do  
    ./bcc tests/test"$i".bc > output
@@ -14,3 +17,4 @@ done
 
 rm output
 rm test_result
+make clean > /dev/null

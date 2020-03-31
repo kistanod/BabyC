@@ -35,8 +35,10 @@ ASTNode* CreateIdentNode(char* name) {
         node->tableLocation = hashResult;
 	    return node;
     } else {
-        printf("ERROR on line %d: Ident not declared.\n", -1);
+        printf("ERROR on line [no line yet, sorry]: Ident not declared.\n");
         exit(1);
+
+        
     }
 
 	
@@ -135,7 +137,7 @@ void AddDeclaration(char* name) {
         symbolTable[hashResult] = (DataItem*)malloc(sizeof(DataItem));
         symbolTable[hashResult]->key = name;
     } else {
-        printf("ERROR on line %d: Multiple declarations of '%s'.\n", -1, name);
+        printf("ERROR on line [no line yet, sorry]: Multiple declarations of '%s'.\n", name);
         exit(1);
     }
 }

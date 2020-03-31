@@ -2,6 +2,7 @@
 	#include <stdio.h>
 	#include "your_code.h"
 
+
 // The parser needs to call the scanner to get the next token 
 	extern int yylex();
 
@@ -17,7 +18,6 @@
 {
 
 }
-%locations
 
 %token LE "<="
 %token GE ">="
@@ -109,7 +109,7 @@ Term: Factor {$$ = $1;}
 
 Factor: IDENT 	{$$ = CreateIdentNode($1); printf("Creating IDENT node for %s\n", $1);}
 	| NUM 	{$$ = CreateNumNode($1); printf("Creating NUM node for %d\n", $1);}
-	| '('Expr')'	{$$ = $2; printf("Creating Expression node in parentheses\n")}
+	| '('Expr')'	{$$ = $2; printf("Creating Expression node in parentheses\n");}
 ;
 
 _WHILE: WHILE '(' Condition ')' '{' StatementList '}' {$$ = CreateWhileNode($3, $6); printf("Creating while loop node\n");}
