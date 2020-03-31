@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define TABLE_SIZE 100
+#define TABLE_SIZE 10000 /* make sure collision definitely does not happen */
 
 DataItem* symbolTable[TABLE_SIZE];
 
@@ -99,13 +99,44 @@ ASTNode* CreateWhileNode(ASTNode* condition, ASTNode* StatementList) {
     return node;
 }
 
+ASTNode* CreateORNode(ASTNode* item1, ASTNode* item2) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = ASTNODE_LOGIC_OP;
+    node->op = OR_OP;
+    node->left = item1;
+    node->right = item2;
+    return node;
+}
+
+ASTNode* CreateANDNode(ASTNode* item1, ASTNode* item2) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = ASTNODE_LOGIC_OP;
+    node->op = AND_OP;
+    node->left = item1;
+    node->right = item2;
+    return node;
+}
+
+ASTNode* CreateCompareNode(ASTNode* expr1, COMPOp comparison, ASTNode* expr2) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = ASTNODE_COMPARE;
+    node->comparison = comparison;
+    node->left = expr1;
+    node->right = expr2;
+    return node;
+}
 
 void AddDeclaration(char* name) {
 
     unsigned int hashResult = hashFunction(name);
-    symbolTable[hashResult] = (DataItem*)malloc(sizeof(DataItem));
-    symbolTable[hashResult]->key = name;
 
+    if(symbolTable[hashResult] != NULL) {
+        symbolTable[hashResult] = (DataItem*)malloc(sizeof(DataItem));
+        symbolTable[hashResult]->key = name;
+    } else {
+        printf("ERROR: symbol %s is already declared", name);
+        exit(1);
+    }
 }
 
 

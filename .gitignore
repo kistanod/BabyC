@@ -5,3 +5,4 @@ bcc
 debug_bcc
 *.bc
 .DS_Store
+.idea

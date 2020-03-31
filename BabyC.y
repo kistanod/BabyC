@@ -55,6 +55,12 @@
 %type <node> Declaration
 %type <node> LHS
 %type <node> IF
+%type <node> _WHILE
+%type <node> Condition
+%type <node> LTerm
+%type <node> LFactor
+%type <node> Compare
+%type <string> OP
 
 %%
 
@@ -64,7 +70,7 @@
 
 // Store the AST root node in gASTRoot
 
-Goal: "main" '(' ')' '{' DeclarationList StatementList '}'	{gASTRoot=$6;} 
+Goal: MAIN '(' ')' '{' DeclarationList StatementList '}'	{gASTRoot=$6;} 
 ;
 //{$$ = NULL;}  {$$ = CreateDeclarationListNode($1,$2); printf("Adding a declaration to a declaration list \n");}
 DeclarationList: | Declaration DeclarationList
@@ -79,8 +85,7 @@ StatementList: {$$ = NULL;}
 ;
 
 Statement: Assignment {$$ = $1;}
-	     //| IF {$$ = $1;}
-	     //| WHILE {$$ = $1;}
+	     | _WHILE {$$ = $1;}
 ;
 
 Assignment: LHS '=' Expr ';' {$$ = CreateAssignmentNode($1, $3); printf("Creating Assignment node\n");}
@@ -102,8 +107,8 @@ Factor: IDENT 	{$$ = CreateIdentNode($1); printf("Creating IDENT node for %s\n",
 	| NUM 	{$$ = CreateNumNode($1); printf("Creating NUM node for %d\n", $1);}
 	| '('Expr')'	{$$ = $2; printf("Creating Expression node in parentheses\n")}
 ;
-/* for now, going to work on symbol table
-WHILE: 'while' '(' Condition ')' '{' StatementList '}' {$$ = CreateWhileNode($3, $6); printf("Creating while loop node\n");}
+
+_WHILE: "while" '(' Condition ')' '{' StatementList '}' {$$ = CreateWhileNode($3, $6); printf("Creating while loop node\n");}
 
 Condition: Condition OR LTerm  {$$ = CreateORNode($1, $3); printf("Creating OR node\n");}
 	 | LTerm {$$ = $1;}
@@ -119,8 +124,7 @@ LFactor: Compare {$$ = $1;}
 Compare: Expr OP Expr {$$ = CreateCompareNode($1, $2, $3);}
 ;
 
-OP: LE | GE | EQ | NE
-
+OP: LE | GE | EQ | NE | '<' | '>' {$$ = $1;}
 ;
-*/
+
 %%
