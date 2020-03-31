@@ -17,6 +17,7 @@
 {
 
 }
+%locations
 
 %token LE "<="
 %token GE ">="
@@ -60,7 +61,6 @@
 %type <node> LTerm
 %type <node> LFactor
 %type <node> Compare
-%type <string> OP
 
 %%
 
@@ -86,6 +86,7 @@ StatementList: {$$ = NULL;}
 
 Statement: Assignment {$$ = $1;}
 	     | _WHILE {$$ = $1;}
+         //| _IF {$$ = $1;}
 ;
 
 Assignment: LHS '=' Expr ';' {$$ = CreateAssignmentNode($1, $3); printf("Creating Assignment node\n");}
@@ -108,7 +109,7 @@ Factor: IDENT 	{$$ = CreateIdentNode($1); printf("Creating IDENT node for %s\n",
 	| '('Expr')'	{$$ = $2; printf("Creating Expression node in parentheses\n")}
 ;
 
-_WHILE: "while" '(' Condition ')' '{' StatementList '}' {$$ = CreateWhileNode($3, $6); printf("Creating while loop node\n");}
+_WHILE: WHILE '(' Condition ')' '{' StatementList '}' {$$ = CreateWhileNode($3, $6); printf("Creating while loop node\n");}
 
 Condition: Condition OR LTerm  {$$ = CreateORNode($1, $3); printf("Creating OR node\n");}
 	 | LTerm {$$ = $1;}
@@ -121,10 +122,13 @@ LTerm: LTerm AND LFactor {$$ = CreateANDNode($1, $3); printf("Creating AND node\
 LFactor: Compare {$$ = $1;}
 ;
 
-Compare: Expr OP Expr {$$ = CreateCompareNode($1, $2, $3);}
+Compare: Expr LE Expr {$$ = CreateLENode($1, $3); printf("Creating Compare node\n");}
+       | Expr GE Expr {$$ = CreateGENode($1, $3); printf("Creating Compare node\n");}
+       | Expr EQ Expr {$$ = CreateEQNode($1, $3); printf("Creating Compare node\n");}
+       | Expr NE Expr {$$ = CreateNENode($1, $3); printf("Creating Compare node\n");}
+       | Expr '>' Expr {$$ = CreateLNode($1, $3); printf("Creating Compare node\n");}
+       | Expr '<' Expr {$$ = CreateMNode($1, $3); printf("Creating Compare node\n");}
 ;
 
-OP: LE | GE | EQ | NE | '<' | '>' {$$ = $1;}
-;
 
 %%

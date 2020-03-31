@@ -59,6 +59,12 @@ ASTNode* CreateWhileNode(ASTNode* condition, ASTNode* StatementList);
 ASTNode* CreateORNode(ASTNode* item1, ASTNode* item2);
 ASTNode* CreateANDNode(ASTNode* item1, ASTNode* item2);
 ASTNode* CreateCompareNode(ASTNode* expr1, COMPOp comparison, ASTNode* expr2);
+ASTNode* CreateLENode(ASTNode* expr1, ASTNode* expr2);
+ASTNode* CreateGENode(ASTNode* expr1, ASTNode* expr2);
+ASTNode* CreateEQNode(ASTNode* expr1, ASTNode* expr2);
+ASTNode* CreateNENode(ASTNode* expr1, ASTNode* expr2);
+ASTNode* CreateLNode(ASTNode* expr1, ASTNode* expr2);
+ASTNode* CreateMNode(ASTNode* expr1, ASTNode* expr2);
 
 // Need a function to add a declaration to your symbol table
 void AddDeclaration(char* name);

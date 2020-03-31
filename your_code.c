@@ -1,6 +1,7 @@
 #include "your_code.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "BabyC.tab.h"
 
 #define TABLE_SIZE 10000 /* make sure collision definitely does not happen */
 
@@ -10,7 +11,7 @@ DataItem* symbolTable[TABLE_SIZE];
 unsigned int hashFunction(char* str) {
     unsigned int hash = 5381;
     int c;
-    while (c = *str++)
+    while ((c = *str++))
         hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
     return hash % TABLE_SIZE;
 }
@@ -34,7 +35,7 @@ ASTNode* CreateIdentNode(char* name) {
         node->tableLocation = hashResult;
 	    return node;
     } else {
-        printf("ERROR: varible %s not declared!", name);
+        printf("ERROR on line : Ident not declared."  );
         exit(1);
     }
 
@@ -130,16 +131,65 @@ void AddDeclaration(char* name) {
 
     unsigned int hashResult = hashFunction(name);
 
-    if(symbolTable[hashResult] != NULL) {
+    if(symbolTable[hashResult] == NULL) {
         symbolTable[hashResult] = (DataItem*)malloc(sizeof(DataItem));
         symbolTable[hashResult]->key = name;
     } else {
-        printf("ERROR: symbol %s is already declared", name);
+        printf("ERROR: symbol %s is already declared\n", name);
         exit(1);
     }
 }
 
+ASTNode* CreateLENode(ASTNode* expr1, ASTNode* expr2) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = ASTNODE_LOGIC_OP;
+    node->comparison = LE_OP;
+    node->left = expr1;
+    node->right = expr2;
+    return node;
+}
+ASTNode* CreateGENode(ASTNode* expr1, ASTNode* expr2) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = ASTNODE_LOGIC_OP;
+    node->comparison = GE_OP;
+    node->left = expr1;
+    node->right = expr2;
+    return node;
 
+}
+ASTNode* CreateEQNode(ASTNode* expr1, ASTNode* expr2) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = ASTNODE_LOGIC_OP;
+    node->comparison = EQ_OP;
+    node->left = expr1;
+    node->right = expr2;
+    return node;
+}
+ASTNode* CreateNENode(ASTNode* expr1, ASTNode* expr2) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = ASTNODE_LOGIC_OP;
+    node->comparison = NE_OP;
+    node->left = expr1;
+    node->right = expr2;
+    return node;
+}
+ASTNode* CreateLNode(ASTNode* expr1, ASTNode* expr2) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = ASTNODE_LOGIC_OP;
+    node->comparison = L_OP;
+    node->left = expr1;
+    node->right = expr2;
+    return node;
+
+}
+ASTNode* CreateMNode(ASTNode* expr1, ASTNode* expr2) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    node->type = ASTNODE_LOGIC_OP;
+    node->comparison = M_OP;
+    node->left = expr1;
+    node->right = expr2;
+    return node;
+}
 
 // Commented out in this assignment 
 /* void GenerateILOC(ASTNode* node); {
