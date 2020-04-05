@@ -8,11 +8,11 @@ do
    diff output tests/test"$i"_result.txt > test_result
    if [ -s test_result ]
    then
-    echo "mismatch found in $i"
+    echo "failed $i"
     cat test_result 
    else
-    echo "no mismarch found in $i"
-    fi
+    echo "passed $i"
+   fi
 done
 
 rm output

@@ -1,6 +1,7 @@
 %{
 	#include <stdio.h>
 	#include "your_code.h"
+    #include <string.h>
 
 
 // The parser needs to call the scanner to get the next token 
@@ -55,7 +56,6 @@
 %type <node> StatementList
 %type <node> Declaration
 %type <node> LHS
-%type <node> IF
 %type <node> Condition
 %type <node> LTerm
 %type <node> LFactor
@@ -79,7 +79,21 @@ Goal: MAIN '(' ')' '{' DeclarationList StatementList '}'	{gASTRoot=$6;}
 DeclarationList: | Declaration DeclarationList
 ;
 
-Declaration: "int" IDENT ';' {AddDeclaration($2); printf("Processing declaration of %s\n", $2);}
+Declaration: "int" IDENT ';' {
+
+    // if ident is declared the function will return 1;
+    
+    if(identIsDeclared($2)) {
+        char string[100] = "Multiple declarations of ";
+        strcat(string, "'");
+        strcat(string, $2);
+        strcat(string, "'");
+        yyerror(string);
+    } else {
+        AddDeclaration($2); 
+        printf("Processing declaration of %s\n", $2);
+    }
+}
 ;
 
 
@@ -95,7 +109,17 @@ Statement: Assignment {$$ = $1;}
 Assignment: LHS '=' Expr ';' {$$ = CreateAssignmentNode($1, $3); printf("Creating Assignment node\n");}
 ;
 
-LHS: IDENT {$$ = CreateIdentNode($1); printf("Creating left-hand IDENT node for %s\n", $1);}
+LHS: IDENT {
+    
+    if(!identIsDeclared($1)) {
+        yyerror("Ident not declared");
+    } else {
+        $$ = CreateIdentNode($1); 
+        printf("Creating left-hand IDENT node for %s\n", $1);
+    }
+    
+}
+;
 
 Expr: Term {$$ = $1;}
 	| Expr '+' Term {$$ = CreateAddNode($1, $3); printf("Creating Addition node\n");}
@@ -107,7 +131,16 @@ Term: Factor {$$ = $1;}
 	| Term '/' Factor {$$ = CreateDivideNode($1, $3); printf("Creating Division node\n");}
 ;
 
-Factor: IDENT 	{$$ = CreateIdentNode($1); printf("Creating IDENT node for %s\n", $1);}
+Factor: IDENT 	{
+
+        if(!identIsDeclared($1)) {
+            yyerror("Ident not declared");
+        } else {
+            $$ = CreateIdentNode($1);
+            printf("Creating IDENT node for %s\n", $1);
+        }
+        
+    }
 	| NUM 	{$$ = CreateNumNode($1); printf("Creating NUM node for %d\n", $1);}
 	| '('Expr')'	{$$ = $2; printf("Creating Expression node in parentheses\n");}
 ;

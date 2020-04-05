@@ -34,14 +34,8 @@ ASTNode* CreateIdentNode(char* name) {
 	    node->name = name;
         node->tableLocation = hashResult;
 	    return node;
-    } else {
-        printf("ERROR on line [no line yet, sorry]: Ident not declared.\n");
-        exit(1);
-
-        
     }
-
-	
+    return NULL;
 }
 
 // Take a statement node and a statement list node and connect them together
@@ -132,14 +126,14 @@ ASTNode* CreateCompareNode(ASTNode* expr1, COMPOp condition, ASTNode* expr2) {
 void AddDeclaration(char* name) {
 
     unsigned int hashResult = hashFunction(name);
+    symbolTable[hashResult] = (DataItem*)malloc(sizeof(DataItem));
+    symbolTable[hashResult]->key = name;
 
-    if(symbolTable[hashResult] == NULL) {
-        symbolTable[hashResult] = (DataItem*)malloc(sizeof(DataItem));
-        symbolTable[hashResult]->key = name;
-    } else {
-        printf("ERROR on line [no line yet, sorry]: Multiple declarations of '%s'.\n", name);
-        exit(1);
-    }
+}
+
+int identIsDeclared(char* name) {
+    unsigned int hashResult = hashFunction(name);
+    return symbolTable[hashResult] != NULL;
 }
 
 ASTNode* CreateLENode(ASTNode* expr1, ASTNode* expr2) {

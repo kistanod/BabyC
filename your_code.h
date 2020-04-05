@@ -76,6 +76,7 @@ ASTNode* CreateMNode(ASTNode* expr1, ASTNode* expr2);
 
 // Need a function to add a declaration to your symbol table
 void AddDeclaration(char* name);
+int identIsDeclared(char* name);
 
 // This is the function that generates ILOC code after the construction of the AST
 //void GenerateILOC(ASTNode* node);
