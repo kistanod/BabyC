@@ -4,8 +4,7 @@
 #include "your_code.h"
 #include "BabyC.tab.h"
 
-void yyerror (const char *s) 
-{
+void yyerror (const char *s) {
    printf("ERROR on line %d: %s.\n", yylineno, s);
    exit(1);
 }
@@ -48,10 +47,10 @@ void yyerror (const char *s)
 "while" return WHILE;
 
  /* This is the action for IDENT. Write the regular expression before the action. */
-[a-zA-Z_][a-zA-Z_0-9]* {yylval.string = strdup(yytext); return IDENT;}
+[a-zA-Z][a-zA-Z0-9]* {yylval.string = strdup(yytext); return IDENT;}
  /* This is the action for NUM. Write the regular expression before the action. */
 
-[+-]?[0-9]+ {yylval.num = atoi(yytext); return NUM; }
+([0-9]|[1-9][0-9]*) {yylval.num = atoi(yytext); return NUM; }
  	/* Whitespace is ignored */
 [ \t\n]+
    /*No match. Fatal error.*/
